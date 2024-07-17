@@ -1,0 +1,63 @@
+from PIL import Image
+
+def encrypt_image(image_path):
+    image = Image.open(image_path)
+    width, height = image.size
+
+    # Create a new image with the same dimensions
+    encrypted_image = Image.new('RGB', (width, height))
+
+    for y in range(height):
+        for x in range(width):
+            # Get the RGB values of the pixel
+            r, g, b = image.getpixel((x, y))
+
+            # Perform some operation on the pixel values
+            # You can choose to swap them, apply mathematical operations, etc.
+            # Here, we'll swap the red and blue channels
+            encrypted_r = b
+            encrypted_g = g
+            encrypted_b = r
+
+            # Set the encrypted pixel values in the new image
+            encrypted_image.putpixel((x, y), (encrypted_r, encrypted_g, encrypted_b))
+
+    # Save the encrypted image
+    encrypted_image_path = image_path.replace('.png', '_encrypted.png')
+    encrypted_image.save(encrypted_image_path)
+    print("Image encrypted and saved as", encrypted_image_path)
+
+def decrypt_image(encrypted_image_path):
+    encrypted_image = Image.open(encrypted_image_path)
+    width, height = encrypted_image.size
+
+    # Create a new image with the same dimensions
+    decrypted_image = Image.new('RGB', (width, height))
+
+    for y in range(height):
+        for x in range(width):
+            # Get the RGB values of the encrypted pixel
+            encrypted_r, encrypted_g, encrypted_b = encrypted_image.getpixel((x, y))
+
+            # Perform the reverse operation to decrypt the pixel values
+            # Here, we'll swap the red and blue channels back
+            decrypted_r = encrypted_b
+            decrypted_g = encrypted_g
+            decrypted_b = encrypted_r
+
+            # Set the decrypted pixel values in the new image
+            decrypted_image.putpixel((x, y), (decrypted_r, decrypted_g, decrypted_b))
+
+    # Save the decrypted image
+    decrypted_image_path = encrypted_image_path.replace('_encrypted.png', '_decrypted.png')
+    decrypted_image.save(decrypted_image_path)
+    print("Image decrypted and saved as", decrypted_image_path)
+
+# Provide the path to your image file
+image_path = "path/to/your/image.png"
+
+# Encrypt the image
+encrypt_image(image_path)
+
+# Decrypt the encrypted image
+decrypt_image("path/to/your/image_encrypted.png")
